@@ -2,6 +2,7 @@ package sink
 
 import (
 	"testing"
+	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pragkent/slackwork/wework"
@@ -50,7 +51,7 @@ func TestTranslate(t *testing.T) {
 				{
 					ToUser:  nil,
 					ToParty: nil,
-					ToTag:   wework.RecipientSet{"#haha"},
+					ToTag:   wework.RecipientSet{"100"},
 					Type:    "textcard",
 					AgentID: 12345,
 					TextCard: &wework.TextCard{
@@ -86,7 +87,7 @@ func TestTranslate(t *testing.T) {
 				{
 					ToUser:  nil,
 					ToParty: nil,
-					ToTag:   wework.RecipientSet{"#haha"},
+					ToTag:   wework.RecipientSet{"100"},
 					Type:    "text",
 					AgentID: 12345,
 					Text: &wework.Text{
@@ -100,6 +101,12 @@ func TestTranslate(t *testing.T) {
 	ws := &WeWorkSink{
 		wc:      wework.NewAgentClient("1001", "2002", 12345),
 		AgentID: 12345,
+		tc: &TagCache{
+			tags: map[string]int{
+				"haha": 100,
+			},
+			expiresAt: time.Now().Add(time.Hour),
+		},
 	}
 
 	for _, tt := range tests {
