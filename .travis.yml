@@ -13,7 +13,7 @@ env:
 
 script:
   - set -e
-  - go get ./...
+  - go get -t ./...
   - make test
   - make static
   - docker build -t $DOCKER_IMAGE .
