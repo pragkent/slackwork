@@ -12,6 +12,8 @@ env:
   - DOCKER_IMAGE=pragkent/slackwork:0.1.0
 
 script:
+  - set -e
+  - go get ./...
   - make test
   - make static
   - docker build -t $DOCKER_IMAGE .
