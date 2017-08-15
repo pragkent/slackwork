@@ -57,7 +57,7 @@ func TestTranslate(t *testing.T) {
 					TextCard: &wework.TextCard{
 						Title:       "[Alerting] Test notification",
 						URL:         "https://grafana.com/",
-						Description: "<div>@haha Someone is testing the alert notification within grafana.</div><div class=\"gray\">High value:</div><div>null</div><div class=\"gray\">Higher Value:</div><div>200</div><div class=\"gray\">Error:</div><div>This is only a test</div>",
+						Description: "<div class=\"normal\">@haha Someone is testing the alert notification within grafana.\n</div><div class=\"gray\">High value</div><div class=\"normal\">null</div><div class=\"gray\">Higher Value</div><div class=\"normal\">200</div><div class=\"gray\">Error</div><div class=\"normal\">This is only a test</div>",
 					},
 				},
 			},
@@ -112,6 +112,7 @@ func TestTranslate(t *testing.T) {
 	for _, tt := range tests {
 		got := ws.Translate(tt.payload)
 		if !cmp.Equal(got, tt.want) {
+			t.Errorf("%v", cmp.Diff(got, tt.want))
 			t.Errorf("WeWorkSink.Translate error. got: %#v want: %#v", got, tt.want)
 		}
 	}
