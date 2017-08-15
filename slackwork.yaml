@@ -1,0 +1,12 @@
+slack:
+  hooks:
+  - name: sentry
+    secret: xyz
+    agent_id: 10001
+
+wework:
+  corp_id: abc
+  agents:
+  - id: 10001
+    name: sentry
+    secret: secret

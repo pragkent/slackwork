@@ -1,0 +1,19 @@
+sudo: false
+
+language: go
+
+services:
+  - docker
+
+go:
+  - 1.8
+
+env:
+  - DOCKER_IMAGE=pragkent/slackwork:0.1.0
+
+script:
+  - make test
+  - make static
+  - docker build -t $DOCKER_IMAGE .
+  - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+  - docker push $DOCKER_IMAGE
