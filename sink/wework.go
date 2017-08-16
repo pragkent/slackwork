@@ -93,6 +93,10 @@ func (w *WeWorkSink) Translate(payload *Payload) []wework.SendMessageRequest {
 }
 
 func (w *WeWorkSink) shouldUseTextCard(payload *Payload) bool {
+	if len(payload.Text) != 0 {
+		return false
+	}
+
 	if len(payload.Attachments) == 0 {
 		return false
 	}
@@ -164,6 +168,7 @@ func (w *WeWorkSink) getDescription(a *Attachment) string {
 		fmt.Fprintf(&buf, "<div class=\"gray\">%s</div>", html.EscapeString(f.Title))
 		fmt.Fprintf(&buf, "<div class=\"normal\">%v</div>", html.EscapeString(f.Value))
 	}
+
 	return buf.String()
 }
 
