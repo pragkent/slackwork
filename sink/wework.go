@@ -121,7 +121,15 @@ func (w *WeWorkSink) buildTextMessages(payload *Payload) []wework.SendMessageReq
 
 	for _, a := range payload.Attachments {
 		buf.WriteString("\n\n")
-		buf.WriteString(w.TranslateText(a.Text))
+
+		if a.TitleLink != "" {
+			fmt.Fprintf(&buf, "<a href=\"%s\">%s</a>", a.TitleLink, a.Title)
+		}
+
+		if a.Text != "" {
+			buf.WriteString("\n")
+			buf.WriteString(w.TranslateText(a.Text))
+		}
 
 		for _, f := range a.Fields {
 			buf.WriteString("\n")
