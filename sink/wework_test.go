@@ -2,7 +2,6 @@ package sink
 
 import (
 	"testing"
-	"time"
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/pragkent/slackwork/wework"
@@ -11,7 +10,7 @@ import (
 func TestTranslate(t *testing.T) {
 	tests := []struct {
 		payload *Payload
-		want    []wework.SendMessageRequest
+		want    []wework.SendChatMessageRequest
 	}{
 		{
 			payload: &Payload{
@@ -47,17 +46,14 @@ func TestTranslate(t *testing.T) {
 					},
 				},
 			},
-			want: []wework.SendMessageRequest{
+			want: []wework.SendChatMessageRequest{
 				{
-					ToUser:  nil,
-					ToParty: nil,
-					ToTag:   wework.RecipientSet{"100"},
-					Type:    "textcard",
-					AgentID: 12345,
+					ChatID: "haha",
+					Type:   "textcard",
 					TextCard: &wework.TextCard{
 						Title:       "[Alerting] Test notification",
 						URL:         "https://grafana.com/",
-						Description: "<div class=\"normal\">@haha Someone is testing the alert notification within grafana.\n</div><div class=\"gray\">High value</div><div class=\"normal\">null</div><div class=\"gray\">Higher Value</div><div class=\"normal\">200</div><div class=\"gray\">Error</div><div class=\"normal\">This is only a test</div>",
+						Description: "<div class=\"normal\">@haha Someone is testing the alert notification within grafana.\n</div><div class=\"gray\">High value</div><div class=\"highlight\">null</div><div class=\"gray\">Higher Value</div><div class=\"highlight\">200</div><div class=\"gray\">Error</div><div class=\"highlight\">This is only a test</div>",
 					},
 				},
 			},
@@ -83,13 +79,10 @@ func TestTranslate(t *testing.T) {
 
 				Text: "Payload Text",
 			},
-			want: []wework.SendMessageRequest{
+			want: []wework.SendChatMessageRequest{
 				{
-					ToUser:  nil,
-					ToParty: nil,
-					ToTag:   wework.RecipientSet{"100"},
-					Type:    "text",
-					AgentID: 12345,
+					ChatID: "haha",
+					Type:   "text",
 					Text: &wework.Text{
 						Content: "Payload Text\n\nAttachment Text\nHigh value: null",
 					},
@@ -101,12 +94,6 @@ func TestTranslate(t *testing.T) {
 	ws := &WeWorkSink{
 		wc:      wework.NewAgentClient("1001", "2002", 12345),
 		AgentID: 12345,
-		tc: &TagCache{
-			tags: map[string]int{
-				"haha": 100,
-			},
-			expiresAt: time.Now().Add(time.Hour),
-		},
 	}
 
 	for _, tt := range tests {
